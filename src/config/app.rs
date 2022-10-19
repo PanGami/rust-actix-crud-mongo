@@ -27,7 +27,7 @@ pub fn config_path(config: &mut web::ServiceConfig) {
                 .service(
                     web::scope("tweets") // http://localhost:8080/api/tweets                            
                         .route("", web::post().to(tweets::create))
-                        // .route("", web::get().to(tweets::index)) 
+                        .route("/{username}", web::get().to(tweets::get_tweet)) 
                         // .route("/{id}", web::get().to(tweets::show))
                         // .route("/{id}", web::delete().to(tweets::destroy))
                         // .route("/{id}", web::patch().to(tweets::update))       

@@ -14,6 +14,21 @@ pub async fn create(client: web::Data<Client>, payload: web::Json<Tweet>) -> Htt
   }
 }
 
+pub async fn get_tweet(client: web::Data<Client>, username: web::Path<String>) -> HttpResponse {
+  let username = username.into_inner();
+  let collection: Collection<Tweet> = client.database(DB_NAME).collection(COLL_NAME);
+  match collection
+      .find_one(doc! { "username": &username }, None)
+      .await
+  {
+      Ok(Some(user)) => HttpResponse::Ok().json(user),
+      Ok(None) => {
+          HttpResponse::NotFound().body(format!("No tweet found with username {username}"))
+      }
+      Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+  }
+}
+
 // async fn index(client: web::Data<Client>) -> HttpResponse {
 //   let collection: Collection<Tweet> = client.database(DB_NAME).collection(COLL_NAME);
 //   let result = collection.find(doc! {}, None).await;
