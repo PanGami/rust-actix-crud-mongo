@@ -5,9 +5,7 @@ use super::models::User;
 const DB_NAME: &str = "testdb";
 const COLL_NAME: &str = "users";
 
-/// Adds a new user to the "users" collection in the database.
-#[post("/add_user")]
-async fn add_user(client: web::Data<Client>, payload: web::Json<User>) -> HttpResponse {
+pub async fn create(client: web::Data<Client>, payload: web::Json<User>) -> HttpResponse {
     let collection = client.database(DB_NAME).collection(COLL_NAME);
     let result = collection.insert_one(payload.into_inner(), None).await;
     match result {
@@ -16,9 +14,7 @@ async fn add_user(client: web::Data<Client>, payload: web::Json<User>) -> HttpRe
     }
 }
 
-/// Gets the user with the supplied username.
-#[get("/get_user/{username}")]
-async fn get_user(client: web::Data<Client>, username: web::Path<String>) -> HttpResponse {
+pub async fn get_user(client: web::Data<Client>, username: web::Path<String>) -> HttpResponse {
     let username = username.into_inner();
     let collection: Collection<User> = client.database(DB_NAME).collection(COLL_NAME);
     match collection

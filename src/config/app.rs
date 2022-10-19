@@ -1,6 +1,7 @@
 use actix_web::{web, HttpRequest};
 use crate::tweets;
 use crate::session;
+use crate::users;
 
 async fn index(_req: HttpRequest) -> String {
     format!("TEST!")
@@ -13,7 +14,16 @@ pub fn config_path(config: &mut web::ServiceConfig) {
             .route("/", web::get().to(index)) //default endpoint
             .service(
                 web::scope("api")
-                .route("", web::get().to(index)) //default api endpoint                       
+                .route("", web::get().to(index)) //default api endpoint                      
+                .service(
+                    web::scope("user") // http://localhost:8080/api/tweets                            
+                        .route("/signup", web::post().to(users::create))
+                        //.route("/signup", web::post().to(tweets::create))
+                        // .route("", web::get().to(tweets::index)) 
+                        // .route("/{id}", web::get().to(tweets::show))
+                        // .route("/{id}", web::delete().to(tweets::destroy))
+                        // .route("/{id}", web::patch().to(tweets::update))       
+                ) 
                 .service(
                     web::scope("tweets") // http://localhost:8080/api/tweets                            
                         .route("", web::post().to(tweets::create))

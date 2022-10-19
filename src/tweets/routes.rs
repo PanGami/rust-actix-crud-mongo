@@ -1,11 +1,11 @@
 use actix_web::{web, Error, HttpResponse};
 use mongodb::{bson::doc, options::IndexOptions, Client, Collection, IndexModel};
-use super::{TweetPayload, Tweet};
+use super::{Tweet};
 
 const DB_NAME: &str = "testdb";
 const COLL_NAME: &str = "tweets";
 
-pub async fn create(client: web::Data<Client>, payload: web::Json<TweetPayload>) -> HttpResponse {
+pub async fn create(client: web::Data<Client>, payload: web::Json<Tweet>) -> HttpResponse {
   let collection = client.database(DB_NAME).collection(COLL_NAME);
   let result = collection.insert_one(payload.into_inner(), None).await;
   match result {
