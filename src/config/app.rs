@@ -16,7 +16,7 @@ pub fn config_path(config: &mut web::ServiceConfig) {
                 web::scope("api")
                 .route("", web::get().to(index)) //default api endpoint                      
                 .service(
-                    web::scope("user") // http://localhost:8080/api/tweets                            
+                    web::scope("user") // http://localhost:8080/api/user                            
                         .route("/signup", web::post().to(users::create))
                         //.route("/signup", web::post().to(tweets::create))
                         // .route("", web::get().to(tweets::index)) 
