@@ -7,9 +7,9 @@ const COLL_NAME: &str = "users";
 
 /// Adds a new user to the "users" collection in the database.
 #[post("/add_user")]
-async fn add_user(client: web::Data<Client>, form: web::Json<User>) -> HttpResponse {
+async fn add_user(client: web::Data<Client>, payload: web::Json<User>) -> HttpResponse {
     let collection = client.database(DB_NAME).collection(COLL_NAME);
-    let result = collection.insert_one(form.into_inner(), None).await;
+    let result = collection.insert_one(payload.into_inner(), None).await;
     match result {
         Ok(_) => HttpResponse::Ok().body("user added"),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
